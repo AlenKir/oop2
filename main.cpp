@@ -3,6 +3,8 @@
 #include "line.hpp"
 #include "screen.hpp"
 #include "square.hpp"
+#include "cross.hpp"
+#include "crossedsquare.hpp"
 
 int main()
 {
@@ -35,40 +37,97 @@ int main()
 	p2.setX(p2.getX() - 1);
 	p2.setY(p2.getY() + 10);
 
-	shapes.emplace_back(std::make_shared<Square>(p1, p2)); // –исуем голову
+	shapes.emplace_back(std::make_shared<Square>(p1, p2)); // голова
 
-	Point eyeLeft = shapes[shapes.size() - 1]->getLeftTop();
+	Point eyeLeft = shapes[shapes.size() - 1]->getLeftTop(); //запрашиваем левый верхний угол головы
+
+	Point leftEarLeftTop = eyeLeft;
+	leftEarLeftTop.setX(eyeLeft.getX() - 6);
+	leftEarLeftTop.setY(eyeLeft.getY() + 2);
+	Point leftEarRightBottom = eyeLeft;
+	leftEarRightBottom.setX(eyeLeft.getX());
+	leftEarRightBottom.setY(eyeLeft.getY() + 6);
+
+	//дл€ левого кра€ левого глаза
+	//смещаемс€ на два вправо и вниз
 	eyeLeft.setX(eyeLeft.getX() + 2);
 	eyeLeft.setY(eyeLeft.getY() + 2);
-	Point eyeRight = Point(eyeLeft.getX() + 2, eyeLeft.getY());
+	Point eyeRight = Point(eyeLeft.getX() + 2, eyeLeft.getY()); //правый край левого глаза
+
 	shapes.emplace_back(std::make_shared<Line>(eyeLeft, eyeRight)); // Ћевый глаз
-	eyeRight = shapes[shapes.size() - 2]->getRightTop();
-	eyeRight.setX(eyeRight.getX() - 2);
+
+	eyeRight = shapes[shapes.size() - 2]->getRightTop(); //снова от головы правый край
+
+	Point rightEarLeftTop = eyeRight;
+	rightEarLeftTop.setX(eyeRight.getX() + 6);
+	rightEarLeftTop.setY(eyeRight.getY() + 2);
+	Point rightEarRightBottom = eyeRight;
+	rightEarRightBottom.setX(eyeRight.getX());
+	rightEarRightBottom.setY(eyeRight.getY() + 6);
+
+	eyeRight.setX(eyeRight.getX() - 2); //правый край правого глаза от координат правого кра€ головы
 	eyeRight.setY(eyeRight.getY() + 2);
-	eyeLeft = Point(eyeRight.getX() - 2, eyeRight.getY());
+	eyeLeft = Point(eyeRight.getX() - 2, eyeRight.getY()); //левый край правого глаза отстоит на два влево от правого кра€
+
 	shapes.emplace_back(std::make_shared<Line>(eyeLeft, eyeRight)); // ѕравый глаз
+
 	std::shared_ptr<Shape> leftEye = shapes[shapes.size() - 2];
 	std::shared_ptr<Shape> rightEye = shapes[shapes.size() - 1];
+
+	//дл€ рисовани€ уха:
+	//нужны параметры дл€ квадрата
+	//leftTop, rightBottom : leftEarLeftSide, leftEarRightBottom
+	//leftEarLeftTop - от левого глаза
+	//leftEarRightBottom - край головы, плюс от leftEarLeftTop 
+	//параметры дл€ креста
+	//конец левой линии, верх креста
+
 	Point nose = Point(leftEye->getRightTop().getX() +
 		(rightEye->getLeftTop().getX() - leftEye->getRightTop().getX()) / 2,
 		leftEye->getRightTop().getY() + 2);
+
 	shapes.emplace_back(std::make_shared<Line>(nose, nose)); // Ќос
+
 	std::shared_ptr<Shape> head = shapes[shapes.size() - 4];
+
 	p1 = head->getLeftBottom(); p1.setX(p1.getX() + 2); p1.setY(p1.getY() - 2);
 	p2 = head->getRightBottom(); p2.setX(p2.getX() - 2); p2.setY(p2.getY() - 2);
+
 	shapes.emplace_back(std::make_shared<Line>(p1, p2)); // –от
+
 	auto costume = std::make_shared<Line>(Point(p1.getX(), p1.getY() + 10),
+
 		Point(p2.getX(), p2.getY() + 10));
+
 	shapes.emplace_back(costume); //Ћини€ костюма
+
 	p1 = Point(costume->getLeftBottom().getX(), costume->getLeftBottom().getY() + 1);
+
 	auto leftDot = std::make_shared<Line>(p1, p1);
+
+	//рисование уха
+	Point crossLeftTop = leftEarLeftTop;
+	Point crossCenter = leftEarLeftTop;
+	crossCenter.setX(crossCenter.getX() + 3);
+
+	shapes.emplace_back(std::make_shared<Square>(leftEarLeftTop, leftEarRightBottom));
+	shapes.emplace_back(std::make_shared<Square>(rightEarLeftTop, rightEarRightBottom));
+
+	shapes.emplace_back(std::make_shared<CrossedSquare>(rightEarLeftTop, rightEarRightBottom, crossLeftTop, crossCenter));
+
 	shapes.emplace_back(leftDot); //Ћева€ точка
+
 	p1 = Point(costume->getRightBottom().getX(), costume->getRightBottom().getY() + 1);
+
 	auto rightDot = std::make_shared<Line>(p1, p1);
+
 	shapes.emplace_back(rightDot); //ѕрава€ точка
+
 	for (auto shape : shapes)
 		shape->draw(screen.get());
+
 	screen->draw();
+
 	std::cin.get();
 	return 0;
 }
