@@ -4,6 +4,7 @@
 class Square : public virtual Shape
 {
 public:
+	Square() {}
 	Square(const Point& leftTop, const Point& rightBottom)
 	{
 		_left = new Line(leftTop, Point(leftTop.getX(), rightBottom.getY()));
@@ -13,6 +14,7 @@ public:
 	}
 	virtual void draw(Screen* screen) const
 	{
+		std::cout << "square draw" << std::endl;
 		_left->draw(screen);
 		_top->draw(screen);
 		_right->draw(screen);
