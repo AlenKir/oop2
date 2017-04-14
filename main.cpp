@@ -12,6 +12,8 @@ int main()
 
 	std::vector<std::shared_ptr<Shape>> shapes; //вектор фигур
 
+	//std::shared_ptr<CrossedSquare> cs(new CrossedSquare(Point(15, 3), Point(32, 13), Point(20, 6), Point(23, 3)));
+	shapes.emplace_back(std::make_shared<Cross>(Point(20, 6), Point(23, 3)));
 	shapes.emplace_back(std::make_shared<Square>(Point(15, 3), Point(32, 12))); // Шляпа (видимо, поместили назад)
 
 	Point p1 = shapes[shapes.size() - 1]->getLeftBottom(); //запрашиваем левый нижний угол шляпы
@@ -40,7 +42,7 @@ int main()
 	shapes.emplace_back(std::make_shared<Square>(p1, p2)); // голова
 
 	Point eyeLeft = shapes[shapes.size() - 1]->getLeftTop(); //запрашиваем левый верхний угол головы
-
+	
 	Point leftEarLeftTop = eyeLeft;
 	leftEarLeftTop.setX(eyeLeft.getX() - 6);
 	leftEarLeftTop.setY(eyeLeft.getY() + 2);
@@ -66,7 +68,7 @@ int main()
 	rightEarRightBottom.setY(eyeRight.getY() + 6);
 
 	eyeRight.setX(eyeRight.getX() - 2); //правый край правого глаза от координат правого края головы
-	eyeRight.setY(eyeRight.getY() + 2);
+	eyeRight.setY(eyeRight.getY() + 2); 
 	eyeLeft = Point(eyeRight.getX() - 2, eyeRight.getY()); //левый край правого глаза отстоит на два влево от правого края
 
 	shapes.emplace_back(std::make_shared<Line>(eyeLeft, eyeRight)); // Правый глаз
@@ -106,14 +108,12 @@ int main()
 	auto leftDot = std::make_shared<Line>(p1, p1);
 
 	//рисование уха
-	Point crossLeftTop = leftEarLeftTop;
-	Point crossCenter = leftEarLeftTop;
-	crossCenter.setX(crossCenter.getX() + 3);
 
-	shapes.emplace_back(std::make_shared<Square>(leftEarLeftTop, leftEarRightBottom));
-	shapes.emplace_back(std::make_shared<Square>(rightEarLeftTop, rightEarRightBottom));
+	//shapes.emplace_back(std::make_shared<Square>(leftEarLeftTop, leftEarRightBottom));
+	//shapes.emplace_back(std::make_shared<Square>(rightEarLeftTop, rightEarRightBottom));
 
-	shapes.emplace_back(std::make_shared<CrossedSquare>(rightEarLeftTop, rightEarRightBottom, crossLeftTop, crossCenter));
+	shapes.emplace_back(std::make_shared<CrossedSquare>(leftEarLeftTop, leftEarRightBottom));
+	//shapes.emplace_back(std::make_shared<CrossedSquare>(rightEarLeftTop, rightEarRightBottom));
 
 	shapes.emplace_back(leftDot); //Левая точка
 
