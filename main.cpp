@@ -61,10 +61,10 @@ int main()
 	eyeRight = shapes[shapes.size() - 2]->getRightTop(); //снова от головы правый край
 
 	Point rightEarLeftTop = eyeRight;
-	rightEarLeftTop.setX(eyeRight.getX() + 6);
+	//rightEarLeftTop.setX(eyeRight.getX() + 6);
 	rightEarLeftTop.setY(eyeRight.getY() + 2);
 	Point rightEarRightBottom = eyeRight;
-	rightEarRightBottom.setX(eyeRight.getX());
+	rightEarRightBottom.setX(eyeRight.getX() + 6);
 	rightEarRightBottom.setY(eyeRight.getY() + 6);
 
 	eyeRight.setX(eyeRight.getX() - 2); //правый край правого глаза от координат правого края головы
@@ -113,7 +113,7 @@ int main()
 	//shapes.emplace_back(std::make_shared<Square>(rightEarLeftTop, rightEarRightBottom));
 
 	shapes.emplace_back(std::make_shared<CrossedSquare>(leftEarLeftTop, leftEarRightBottom));
-	//shapes.emplace_back(std::make_shared<CrossedSquare>(rightEarLeftTop, rightEarRightBottom));
+	shapes.emplace_back(std::make_shared<CrossedSquare>(rightEarLeftTop, rightEarRightBottom));
 
 	shapes.emplace_back(leftDot); //Левая точка
 
