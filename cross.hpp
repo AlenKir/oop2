@@ -8,6 +8,7 @@ class Cross : public virtual Shape
 public:
 	Cross()
 	{}
+
 	Cross(const Point& left, const Point& top)
 	{
 		Point p1, p2;
@@ -21,6 +22,7 @@ public:
 	}
 	virtual void draw(Screen* screen) const
 	{
+		std::cout << "cross draw" << std::endl;
 		_first->draw(screen);
 		_second->draw(screen);
 	}
